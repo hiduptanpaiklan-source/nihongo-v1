@@ -3878,6 +3878,260 @@ body.essayModalOpen{
   }
 }
 
+/* Final responsive layout: header and content across laptop, tablet, and phone */
+html,
+body{
+  width:100%;
+  max-width:100%;
+  overflow-x:hidden;
+}
+
+.appShell{
+  width:100%;
+  min-width:0;
+}
+
+.appHeader{
+  grid-template-columns:minmax(240px,280px) minmax(0,1fr) minmax(250px,290px);
+  align-items:center;
+  overflow:hidden;
+}
+
+.brand,
+.brand > div,
+.appNav,
+.userCluster,
+.xpHeaderGroup,
+.studentIdentity{
+  min-width:0;
+}
+
+.topicCountBadge{
+  display:none !important;
+}
+
+.appNav{
+  width:100%;
+  justify-content:center;
+  flex-wrap:nowrap;
+  overflow:visible;
+}
+
+.userCluster{
+  width:100%;
+  justify-content:flex-end;
+  flex-wrap:nowrap !important;
+}
+
+.xpHeaderGroup{
+  flex:0 0 auto;
+}
+
+.studentIdentity{
+  flex:1 1 auto;
+  max-width:200px;
+}
+
+.appContent,
+.topicPractice,
+.layout,
+.card,
+.panel,
+.questionCard,
+.materialShell,
+.essayShell,
+.silangLayout{
+  min-width:0;
+  max-width:100%;
+}
+
+.qText,
+.choice,
+.studentIdentity,
+.materialItem,
+.essayQuestionText{
+  overflow-wrap:anywhere;
+}
+
+@media (min-width:1121px) and (max-width:1399px){
+  .appHeader{
+    grid-template-columns:230px minmax(0,1fr) 270px !important;
+    gap:10px;
+  }
+
+  .studentIdentity{
+    max-width:178px;
+  }
+}
+
+@media (min-width:700px) and (max-width:1120px){
+  .appHeader{
+    grid-template-columns:minmax(0,1fr) !important;
+    gap:12px;
+    overflow:hidden;
+  }
+
+  .appNav{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:8px;
+    overflow:visible;
+    padding:0;
+  }
+
+  .userCluster{
+    justify-content:space-between;
+  }
+
+  .studentIdentity{
+    max-width:260px;
+  }
+}
+
+@media (max-width:699px){
+  body{
+    min-width:0 !important;
+  }
+
+  .appShell{
+    padding:0 8px 16px;
+  }
+
+  .appHeader{
+    grid-template-columns:minmax(0,1fr) !important;
+    gap:11px;
+    padding:14px 12px;
+    border-radius:0 0 22px 22px;
+  }
+
+  .brand{
+    width:100%;
+  }
+
+  .appNav{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:7px;
+    overflow:visible;
+    padding:0;
+  }
+
+  .navBtn{
+    width:100%;
+    min-height:48px;
+    justify-content:center;
+    padding:8px 6px;
+    gap:5px;
+    font-size:12px;
+    line-height:1.15;
+    text-align:center;
+    white-space:normal;
+  }
+
+  .navIcon{
+    flex:0 0 auto;
+  }
+
+  .userCluster{
+    justify-content:space-between;
+    gap:8px !important;
+  }
+
+  .studentIdentity{
+    flex:1 1 auto;
+    max-width:none;
+  }
+
+  .appContent{
+    padding:20px 10px 14px;
+    border-radius:22px;
+  }
+
+  .card,
+  .panel{
+    padding:16px;
+    border-radius:20px;
+  }
+
+  .topicAccessBar{
+    padding:14px;
+  }
+
+  .studentLoginOverlay{
+    padding:12px;
+  }
+
+  .studentLoginCard{
+    max-height:calc(100dvh - 24px);
+    overflow:auto;
+    padding:21px 18px;
+    border-radius:22px;
+  }
+
+  .studentField input{
+    font-size:16px;
+  }
+
+  table{
+    table-layout:fixed;
+  }
+
+  th,
+  td{
+    overflow-wrap:anywhere;
+  }
+
+  .qText,
+  .explain,
+  .note,
+  .choice span:last-child,
+  .materialLead,
+  .materialSub,
+  .materialItem,
+  .materialTip,
+  .matchTitle p,
+  .matchHint,
+  .matchSpeech,
+  .essayLead,
+  .essayQuestionText,
+  .formulaText{
+    text-align:left !important;
+  }
+}
+
+@media (max-width:370px){
+  .brandIcon{
+    font-size:27px;
+  }
+
+  .brandName{
+    font-size:22px;
+  }
+
+  .brandSub{
+    font-size:10px;
+  }
+
+  .appNav{
+    gap:6px;
+  }
+
+  .navBtn{
+    min-height:46px;
+    padding:7px 4px;
+    font-size:11px;
+  }
+
+  .xpBadge{
+    min-width:64px !important;
+  }
+
+  .studentIdentity{
+    padding:7px 8px;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -3995,13 +4249,6 @@ function changeStudent(){
   ensureStudentLogin(true);
 }
 
-function submissionId(){
-  if(globalThis.crypto?.randomUUID){
-    return crypto.randomUUID();
-  }
-  return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
-}
-
 function submitStudentResult(activity,data){
   if(!studentIdentity){
     ensureStudentLogin(true);
@@ -4017,13 +4264,11 @@ function submitStudentResult(activity,data){
   }
 
   const payload = {
-    submissionId:submissionId(),
     submittedAt:new Date().toISOString(),
     username:studentIdentity.username,
     email:studentIdentity.email,
     activity,
-    pageUrl:location.href,
-    userAgent:navigator.userAgent,
+    totalXP:Math.max(0,Number(state.xp?.total) || 0),
     ...data
   };
 
